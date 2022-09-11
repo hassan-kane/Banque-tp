@@ -14,6 +14,7 @@ namespace Compte
         private string nom;
         private double solde;
         private double decouvert;
+
         public Compte(int numero, string nom, double solde, double decouvert)
         {
             this.numero = numero;
@@ -22,90 +23,107 @@ namespace Compte
             this.decouvert = decouvert;
         }
 
+        public Compte()
+        {
+            this.numero = 0;
+            this.nom = null;
+            this.solde = 0;
+            this.decouvert = 0;
+        }
+
         public int getNumero()
         {
             return numero;
         }
-        public int setNumero()
+        public void setNumero(int numero)
         {
-            return this.numero;
+            this.numero = numero;
         }
 
         public string getNom()
         {
             return nom;
         }
-        public string setNom()
+        public void setNom(string nom)
         {
-            return this.nom;
+            this.nom = nom;
         }
 
         public double getSolde()
         {
             return solde;
         }
-        public double setSolde()
+        public void setSolde(double solde)
         {
-            return this.solde;
+            this.solde = solde;
         }
 
         public double getDecouvert()
         {
             return decouvert;
         }
-        public double setDecouvert()
+        public void setDecouvert(double decouvert)
         {
-            return this.decouvert;
+            this.decouvert = decouvert;
+        }
+
+        public void crediter(double montant)
+        {
+            this.solde += montant;
+            Console.WriteLine("Votre compte à été crédité de: " + montant + " €");
+        }
+
+        public bool debiter(double montant)
+        {
+            /*double soldeDecouvertAutorise = System.Math.Abs(this.decouvert);*/
+            if (this.solde - montant >= this.decouvert)
+            {
+                this.solde -= montant;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public void transferer(double montant, Compte compteEnvoie)
+        {
+            if(this.debiter(montant) == true)
+            {
+                this.debiter(montant);
+                compteEnvoie.crediter(montant);
+            }
+        }
+
+        public bool superieur(Compte compte)
+        {
+            if(this.solde < compte.solde)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool inferieur(Compte compte)
+        {
+            if (this.solde > compte.solde)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public override string ToString()
         {
             return
-                    $" \n Numéro:  {getNumero()} \n Nom:  { getNom()} \n Solde: {getSolde()} \n Decouvert: {getDecouvert()}";
-        }
-
-        public bool crediter(double montant)
-        {
-
-            if(true)
-            {
-                this.solde = this.solde + montant;
-                return true;
-            }
-            else
-            {
-                Console.WriteLine("Opération impossible: Votre compte n'est pas créditable"); 
-                return false;
-            }
-        }
-
-        public bool debiter(double montant)
-        {
-            if (this.solde >= montant || this.solde >= this.decouvert)
-            {
-                this.solde = this.solde - montant;
-                return true ;
-            }
-            else
-            {
-                Console.WriteLine("Opération impossible: Votre compte n'est pas débitable");
-                return false;
-            }
-        }
-
-        public void transferer(double montant, Compte compteReception)
-        {
-            
-
-            if (this.debiter(montant))
-            {
-                compteReception.crediter(montant);
-            }
-            else
-            {
-                Console.WriteLine("Opération impossible");
-            }
-
+                    $" \n Numéro:  {getNumero()} \n Nom:  { getNom()} \n Solde: {getSolde()} € \n Decouvert: {getDecouvert()} € \n";
         }
     }
 }
